@@ -79,18 +79,18 @@
 
 ### 3. EKS 관리용 인스턴스 정보 확인
 
-   1. eksctlhost로 접속
+   1). eksctlhost로 접속
       ```
       ssh -i kp_dev_oregon.pem ec2-user@35.93.135.83
       ```
       
-   2. 사용자 확인
+   2). 사용자 확인
       ```
       [root@myeks-host ~]# whoami
       root
       ```
       
-   3. 기본 설치 도구 확인
+   3). 기본 설치 도구 확인
    ```
    // kubectl 버전 확인
    [root@myeks-host ~]# kubectl version --client=true -o yaml | yh
@@ -120,7 +120,7 @@ aws-cli/2.15.30 Python/3.11.8 Linux/4.14.336-257.562.amzn2.x86_64 exe/x86_64.amz
 Server Version: 20.10.25
    ```
 
-   4. awscli 사용을 위한 IAM 자격 증명
+   4). awscli 사용을 위한 IAM 자격 증명
    ```
    // awscli로 인스턴스 정보 확인 (IAM 자격 증명 X)
    [root@myeks-host ~]# aws ec2 describe-instances | jq
@@ -133,7 +133,7 @@ Unable to locate credentials. You can configure credentials by running "aws conf
    - aws config를 입력하여 Access Key ID, Secret Access Key, Region 코드를 입력
    - IAM 자격 증명이 이루어지면 awscli 도구로 인스턴스 정보 확인
 
-   5. EKS 배포할 VPC 정보 확인
+   5). EKS 배포할 VPC 정보 확인
    ```
    // CLUSTER_NAME 변수 확인
    [root@myeks-host ~]# echo $CLUSTER_NAME
@@ -147,7 +147,7 @@ myeks
 vpc-0c422ea3c99bbf029
    ```
 
-   6. EKS 배포할 VPC ID 변수 저장
+   6). EKS 배포할 VPC ID 변수 저장
    ```
    // VPCID 변수에 myeks-VPC ID 값을 저장
    [root@myeks-host ~]# export VPCID=$(aws ec2 describe-vpcs --filters "Name=tag:Name,Values=$CLUSTER_NAME-VPC" | jq -r .Vpcs[].VpcId)
@@ -160,7 +160,7 @@ vpc-0c422ea3c99bbf029
 vpc-0c422ea3c99bbf029
    ```
 
-   7. EKS 배포할 VPC의 서브넷 정보 확인
+   7). EKS 배포할 VPC의 서브넷 정보 확인
    ```
    // EKS를 배포할 VPC의 전체 서브넷 정보 확인
    aws ec2 describe-subnets --filters "Name=vpc-id,Values=$VPCID" --output json | jq
@@ -178,7 +178,7 @@ subnet-031bf8002dd9e2087
 subnet-008213cb8bc558678
    ```
 
-   8. EKS 배포할 퍼블릭 서브넷 ID 변수 저장
+   8). EKS 배포할 퍼블릭 서브넷 ID 변수 저장
    ```
    // 변수에 퍼블릭 서브넷 ID 값을 저장
    export PubSubnet1=$(aws ec2 describe-subnets --filters Name=tag:Name,Values="$CLUSTER_NAME-PublicSubnet1" --query "Subnets[0].[SubnetId]" --output text)
@@ -198,7 +198,7 @@ subnet-031bf8002dd9e2087
 subnet-008213cb8bc558678
    ```
 
-   9. 변수 호출 (종합)
+   9). 변수 호출 (종합)
    ```
    [root@myeks-host ~]# echo $AWS_DEFAULT_REGION
 us-west-2
