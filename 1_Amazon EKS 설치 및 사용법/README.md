@@ -129,8 +129,8 @@ AGENDA
 
 1. Amazon EKS 소개
 2. Amazon EKS Cluster 배포
-3. Amazon EKS Control Plane
-4. Amazon EKS Data Plane
+3. Amazon EKS Control Plane - 아키텍처
+4. Amazon EKS Data Plane - 아키텍처
 5. Amazon EKS Cluster Endpoint Access
 
 ---
@@ -155,14 +155,38 @@ AGENDA
 
 ### 2. Amazon EKS Cluster 배포
 
-   1) Kubernetes 컨트롤 플레인 또는 노드를 제공하는 AWS의 관리형 Kubernetes 서비스
-      -  Identity : 대상을 식별
+   1) 관리 콘솔
+      -  AWS 관리 콘솔에 접근하여 EKS 클러스터 생성
+
+   2) 관리 콘솔
+      -  EKS 클러스터를 생성하고 관리하는 명령어 기반의 CLI 도구
+
+   3) 관리 콘솔
+      -  코드기반으로 인프라를 정의해 EKS 클러스터 생성
+
+---
+
+### 3. Amazon EKS Control Plane - 아키텍처
+
+![image](https://github.com/devhyunuk/eks-cloudnet/assets/49749510/97356961-9305-4035-ab39-98cab0fc1a95)
+
+   1) Kubernetes API 서버, 컨트롤러, 스케줄러, ETCD가 AWS 환경에서 구성
+   2) AWS 관리용 VPC 생성 : Amazon EKS 클러스터를 배포하면 컨트롤 플레인을 배치하는 용도
+      -  관리용 VPC는 사용자의 어카운트가 아닌 AWS가 자체 관리하는 어카운트에서 생성
+      -  다수의 가용 영역을 통해 자원을 배치
+      -  ETCD는 데이터 저장소 개념의 컴포넌트로 다른 컴포넌트와 특성이 달라 별도의 인스턴스로 분리하여 구성
+   3) 안정적으로 유지하기 위해 오토스케일링 그룹으로 묶어 지속적이고 안정적인 서비스를 유지하도록 구성
+   4) 오토스케일링 기능을 통해 지정된 수량의 자원을 유지하거나 확장하거나 축소 가능 (서비스의 연속성)
+   5) 가용 영역별로 자원이 다수로 구성됨에 따라 아마존 예의비를 배치해 트래픽을 부하분산하는 환경을 구성
+      -  다수의 자원에게 트래픽을 분산하여 효율적인 통신과 고가용성을 보
+
+
+---
+
+### 4. Amazon EKS Data Plane - 아키텍처
 
 
 
-
-
-
-
+   1) Kubernetes API 서버, 컨트롤러, 스케줄러, ETCD가 AWS 환경에서 구
 
 
