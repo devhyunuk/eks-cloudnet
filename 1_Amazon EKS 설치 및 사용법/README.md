@@ -183,10 +183,127 @@ AGENDA
 
 ---
 
-### 4. Amazon EKS Data Plane - 아키텍처
+### 4-1. Amazon EKS Data Plane - 아키텍처
+
+![image](https://github.com/devhyunuk/eks-cloudnet/assets/49749510/88431e17-fc0f-4e57-b51c-8242aacda0e6)
+
+   1) EKS 데이터 플레인 : Kubernetes 클러스터의 노드를 구성하기 위해 데이터 플레인 컴포넌트를 구성하는 영역
+   2) kubelet, kube-proxy, container-runtime, pod 구성
+   3) 컨트롤 플레인과 다르게 사용자 VPC에서 생성 (사용자가 직접적으로 관리 및 운용이 가능)
+   4) kubelet은 컨트롤 플레인에 위치한 API 서버와 통신을 위해 연결 필요
+   5) 컨트롤 플레인과 데이터 플레인은 EKS Owned ENI라는 네트워크 인터페이스로 연결
+   6) 컨트롤 플레인과 데이터 플레인은 EKS-owned ENI를 통해 연결
+
+---
+
+### 4-2. Amazon EKS Data Plane - 노드를 구성하는 방식 3가지
+
+   1) 관리형 노드 그룹
+      - EKS에 최적화된 최신 AMI를 사용
+      - 유지관리 및 버전 관리를 AWS에서 지원
+      - 관리 부하 : 보통
+      - 제약 사항 : 보통
+        
+   2) 자체 관리형 노드
+      - 사용자 정의 AMI를 사용
+      - 유지 관리 및 버전 관리를 직접 수행
+      - 관리 부하 : 높음
+      - 제약 사항 : 적음
+        
+   3) AWS Fargate
+      - 사용자가 직접 관리 없이 서버리스 환경에서 동작
+      - AWS Fargate 환경에서 제공하는 Micro VM 형태로 할당하여 관리
+      - 관리 부하 : 낮음
+      - 제약 사항 : 많음
+
+---
+
+### 5. Amazon EKS Cluster Endpoint Access - Public
+
+   1) Endpoint Access - Public 방식
+
+      ![image](https://github.com/devhyunuk/eks-cloudnet/assets/49749510/c933dd33-3dcb-4599-adcc-7c1c242d063e)
+
+      - API 서버로 접근을 위해 엔드포인트를 정의
+      - 엔드포인트 방식을 퍼블릭으로 구성하면 : 엔드포인트를 접근하는 도메인 주소를 퍼블릭 IP 주소로 맵핑
+      - 퍼블릭 IP 주소는 NLB의 퍼블릭 IP를 정의
+      - Public 방식에 따른 트래픽 흐름 3가지
+      - A. 컨트롤 플레인의 API 서버에서 -> 워커노드의 kubelet으로 전달하는 트래픽 흐름
+          - API 서버에서 EKS-owned ENI를 통해 워커노드의 쿠블렛으로 전달
+      - B. kubelet에서 -> api 서버로 전달하는 트래픽 흐름
+          - 엔드포인트가 public ip 주소이기 때문에 인터넷 게이트 위로 빠져나가 인터넷 구간에 통해 관리형 vpc로 진입하고 api 서버가 전달받음
+          - 외부 인터넷 구간으로 트래픽이 노출되어 보안에 위협
+      - C. KubeCtl의 명령을 통해 -> API 서버로 전달하는 트래픽 흐름
+          - 외부 인터넷 구간에서 관리형 VPC로 진입하고 API 서버가 전달을 받음
+          - 퍼블릭 환경임에 따라 사용자는 외부 구간에서 인터넷을 통해 자유롭게 접근이 가능 (보안에 위협)
+          - 
+
+   2) Endpoint Access - Public + Private 방식
+
+      ![image](https://github.com/devhyunuk/eks-cloudnet/assets/49749510/8da98642-594f-4abe-a15b-df86bb95f968)
+
+      - 엔드포인트의 도메인 주소는 사용자를 위한 주소로 public IP 주소로 정의
+      - 워커노드를 위한 주소는 별도의 프라이빗 호스팅존을 구성해 대상을 EKS-owned-ENI로 구성 (Public 방식과 차이점)
+      - Public + Private 방식에 따른 트래픽 흐름 3가지
+      - A. 컨트롤 플레인의 API 서버에서 -> 워커노드의 kubelet으로 전달하는 트래픽 흐름
+          - API 서버에서 EKS-owned ENI를 통해 워커노드의 쿠블렛으로 전달
+      - B. kubelet에서 -> api 서버로 향하는 트래픽 흐름
+          - AWS 내부의 Private Hosting Zone에게 DNS 질의를 한 후
+          - 대상을 EKS Owned ENI로 전달 ->  API 서버에 전달
+          - 외부 인터넷 구간에 노출 없이 보완성 있는 통신
+      - C. 사용자에서 kubectl 명령을 API 서버에게 전달 트래픽 흐름
+          - 맵핑된 도메인 주소에 따라 Public IP로 API 서버가 전달
+
+   3) Endpoint Access - Private 방식
+
+      ![image](https://github.com/devhyunuk/eks-cloudnet/assets/49749510/43ccfd44-20b9-4545-93d9-7d438f64efcd)
+      
+      - 엔드포인트 방식이 오직 프라이빗이기 때문에 접근할 엔드포인트 도메인 주소는 AWS 내부의 프라이빗 호스팅 존에서만 관리
+      - 사용자는 커스텀 VPC에 위치해서 kubectl 명령을 수행만 가능 (내부에서만 가능)
+      - 일반적인 비즈니스 환경에서 EKS 클러스터 엔드포인트 Private 방식을 선호
+      - A. 컨트롤 플레인의 API 서버에서 -> 워커노드의 kubelet으로 전달하는 트래픽 흐름
+          - API 서버에서 EKS-owned ENI를 통해 워커노드의 쿠블렛으로 전달
+      - B. kubelet에서 -> api 서버로 향하는 트래픽 흐름
+          - AWS 내부의 Private Hosting Zone에게 DNS 질의를 한 후
+          - 대상을 EKS Owned ENI로 전달 ->  API 서버에 전달
+          - 외부 인터넷 구간에 노출 없이 보완성 있는 통신
+      - C. 사용자에서 kubectl 명령을 API 서버에게 전달 트래픽 흐름
+          - Private Hosting Zone에 의해 EKS-owned ENI를 통해 API 서버로 통신
+          - 외부 인터넷 구간의 노출 없이 AWS 내부로 동작하여 보완성 있는 통신과 효율적인 통신
+          
 
 
 
-   1) Kubernetes API 서버, 컨트롤러, 스케줄러, ETCD가 AWS 환경에서 구
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
