@@ -10,14 +10,32 @@
 
 ---
 
-### 3. Kubernetes Overview
+### 1. 실습 개요
 
-   ![image](https://github.com/devhyunuk/eks-cloudnet/assets/49749510/437f186b-5cde-462a-be6a-b7257ebb7392)
+   ![image](https://github.com/devhyunuk/eks-cloudnet/assets/49749510/87d8b50f-6c36-48b1-a043-4dc88bdd2783)
 
-   1) Kubernetes라는 뜻이 배의 방향을 조정하는 키를 조작하는 조타수라는 그리스어
-      - 도커가 컨테이너를 적지 않은 선박이라면 Kubernetes는 이를 조정하는 조타수의 의미
+---
+
+### 2. CloudFormation으로 기본 인프라 배포
+
+   1) 스택 생성
+      - cnaeb_ch1_lab_1.yaml 베이스로 생성
+      
+      ![image](https://github.com/devhyunuk/eks-cloudnet/assets/49749510/0c2bc5b1-0819-40ed-a5d2-668fb566d8c5)
+   
+   2) 스택 세부 정보 지정
+      - KeyName과 SgIngressSshCidr 지정
+        
+      ![image](https://github.com/devhyunuk/eks-cloudnet/assets/49749510/56031881-bfa4-4e35-b6e3-356206fd73d5)
 
 
+   3) CloudFormation으로 기본 인프라 배포 구성
+
+      ![image](https://github.com/devhyunuk/eks-cloudnet/assets/49749510/187f9ec1-60d9-4e54-871f-11ace8f3a041)
+
+            
+
+      ![image](https://github.com/devhyunuk/eks-cloudnet/assets/49749510/c4fd4f3c-723d-46ca-87ed-7d4725330c71)
 
 
 
