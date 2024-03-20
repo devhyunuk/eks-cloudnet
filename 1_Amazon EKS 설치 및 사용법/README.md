@@ -13,7 +13,7 @@ AGENDA
 
 ---
 
-## 3. Kubernetes Overview
+### 3. Kubernetes Overview
 
    ![image](https://github.com/devhyunuk/eks-cloudnet/assets/49749510/437f186b-5cde-462a-be6a-b7257ebb7392)
 
@@ -45,7 +45,7 @@ AGENDA
 
 ---
 
-## 4. Amazon VPC/ELB/Route 53 Overview
+### 4. Amazon VPC/ELB/Route 53 Overview
 
    1) VPC (Virtual Private Cloud)
       -  AWS 클라우드 사용자만의 가상의 프라이빗 클라우드 네트워크를 제공
@@ -72,7 +72,7 @@ AGENDA
 
 ---
 
-## 5. Amazon EBS/EFS/S3 Overview
+### 5. Amazon EBS/EFS/S3 Overview
 
    1) EBS (Elastic Block Storage)
       -  Kubernetes는 컨테이너 스토리지 인터페이스라는 CSI 플러그인을 제공 : AWS 스토리지 서비스와 손쉬운 연결이 가능
@@ -93,7 +93,7 @@ AGENDA
 
 ---
 
-## 6. AWS IAM Overview
+### 6. AWS IAM Overview
 
    1) IAM (Identity Access Management)
       -  Identity : 대상을 식별
@@ -120,4 +120,49 @@ AGENDA
    6) IAM 정책
       -   자격증명이나 AWS 자원 접근에 대한 권한을 정의
       -   보안주체에게 어떠한 작업을 요청할 때 권한을 평가
+
+---
+
+## Section #2 Amazon EKS 서비스
+
+AGENDA
+
+1. Amazon EKS 소개
+2. Amazon EKS Cluster 배포
+3. Amazon EKS Control Plane
+4. Amazon EKS Data Plane
+5. Amazon EKS Cluster Endpoint Access
+
+---
+
+### 1. Amazon EKS 소개
+
+   1) Kubernetes 컨트롤 플레인 또는 노드를 제공하는 AWS의 관리형 Kubernetes 서비스
+      -  Identity : 대상을 식별
+     
+   2) 다수의 AWS 가용 영역에 Kubernetes Control Plane 실행
       
+   3) 다양한 AWS 서비스와 통합하여 확장성과 보안성 제공
+      -  Amazon ECR을 통해 : 컨테이너 이미지 저장소 활용
+      -  Amazon ELB을 통해 : 부하 분산 적용
+      -  AWS IAM를 통해 : 보안 주체 및 액세스 사용 
+      -  Amazon VPC를 통해 : 노드 격리
+
+   4) Kubernetes 최신 버전을 사용하여 Amazon EKS로 손쉬운 마이그레이션
+      -  보통 4~5개 마이너 버전을 지원 -> 현재 1.22.1.23, 1.24, 1.25 1.26, 1.27 지원
+
+---
+
+### 2. Amazon EKS Cluster 배포
+
+   1) Kubernetes 컨트롤 플레인 또는 노드를 제공하는 AWS의 관리형 Kubernetes 서비스
+      -  Identity : 대상을 식별
+
+
+
+
+
+
+
+
+
