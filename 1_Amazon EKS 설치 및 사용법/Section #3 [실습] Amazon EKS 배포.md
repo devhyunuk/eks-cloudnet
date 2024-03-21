@@ -213,8 +213,12 @@ vpc-0c422ea3c99bbf029
 subnet-031bf8002dd9e2087,subnet-008213cb8bc558678
    ```
 
+---
 
+### 3. CloudFormation으로 기본 인프라 배포
 
+   1) 스택 생성
+      - cnaeb_ch1_lab_1.yaml 베이스로 생성
 
 
 
