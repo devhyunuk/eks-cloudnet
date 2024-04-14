@@ -18,7 +18,7 @@ AGENDA
    ![image](https://github.com/devhyunuk/eks-cloudnet/assets/49749510/437f186b-5cde-462a-be6a-b7257ebb7392)
 
    1) Kubernetes라는 뜻이 배의 방향을 조정하는 키를 조작하는 조타수라는 그리스어
-      - 도커가 컨테이너를 적지 않은 선박이라면 Kubernetes는 이를 조정하는 조타수의 의미
+      - 도커가 컨테이너를 적재하는 선박이라면 Kubernetes는 이를 조정하는 조타수의 의미
      
    2) Kubernetes 클러스터는 1개 이상의 노드 구성
       - 노드에는 Kubernetes의 최소 단위인 Pod를 구성할 수 있음
